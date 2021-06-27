@@ -5,6 +5,9 @@ import config from "../conf/index.js";
 function getCityFromURL(search) {
   // TODO: MODULE_ADVENTURES
   // 1. Extract the city id from the URL's Query Param and return it
+  let params = new URLSearchParams(search);
+  console.log(params.get('city'));
+  return params.get('city');
 
 }
 
@@ -13,12 +16,71 @@ async function fetchAdventures(city) {
   // TODO: MODULE_ADVENTURES
   // 1. Fetch adventures using the Backend API and return the data
 
+  let url = config.backendEndpoint + "/adventures?city=" + city;
+  try {
+    let response = await fetch(url);
+    let rawdata = await response.json();
+    return rawdata;
+  } catch (err) {
+    return null;
+  }
+
 }
 
 //Implementation of DOM manipulation to add adventures for the given city from list of adventures
 function addAdventureToDOM(adventures) {
   // TODO: MODULE_ADVENTURES
   // 1. Populate the Adventure Cards and insert those details into the DOM
+  for (let activcad of adventures) {
+    let colm = document.createElement("div");
+    colm.setAttribute("class", "col-6 col-lg-3 mb-2");
+    let cad = document.createElement("div");
+    cad.setAttribute("class", "activity-card");
+    let imng=document.createElement("img");
+    imng.setAttribute("src", activcad.image);
+    imng.setAttribute("class", "img-fluid");
+    cad.appendChild(imng);
+    let baner=document.createElement("div");
+    baner.setAttribute("class", "category-banner");
+    let txtbanr=document.createElement("p");
+    txtbanr.innerHTML=activcad.category;
+    baner.appendChild(txtbanr);
+    cad.appendChild(baner);
+
+    let rw1=document.createElement("div");
+    rw1.setAttribute("class", "row align-self-stretch mx-1 my-2");
+    let col1=document.createElement("div");
+    col1.setAttribute("class", "col text-left");
+    col1.innerHTML=activcad.name;
+    let col2=document.createElement("div");
+    col2.setAttribute("class", "col text-right");
+    col2.innerHTML=activcad.costPerHead;
+    rw1.appendChild(col1);
+    rw1.appendChild(col2);
+    cad.appendChild(rw1);
+
+
+    let rw2=document.createElement("div");
+    rw2.setAttribute("class", "row align-self-stretch mx-2");
+    let col3=document.createElement("div");
+    col3.setAttribute("class", "col text-left");
+    col3.innerHTML="Duration";
+    let col4=document.createElement("div");
+    col4.setAttribute("class", "col text-right");
+    col4.innerHTML=activcad.duration+" Hours";
+    rw2.appendChild(col3);
+    rw2.appendChild(col4);
+    cad.appendChild(rw2);
+
+    let lnk=document.createElement("a");
+    lnk.setAttribute("href", `detail/?adventure=${activcad.id}`);
+    lnk.setAttribute("id", activcad.id);
+    lnk.appendChild(cad);
+
+    colm.appendChild(lnk);
+
+    document.getElementById("data").appendChild(colm);
+  }
 
 }
 
