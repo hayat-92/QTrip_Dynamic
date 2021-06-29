@@ -144,6 +144,24 @@ function addBootstrapPhotoGallery(images) {
 function conditionalRenderingOfReservationPanel(adventure) {
   // TODO: MODULE_RESERVATIONS
   // 1. If the adventure is already reserved, display the sold-out message.
+  console.log(adventure);
+
+  if (adventure.available === true) {
+    document.getElementById("reservation-panel-available").style.display =
+      "block";
+    document.getElementById("reservation-panel-sold-out").style.display =
+      "none";
+    document.getElementById("reservation-person-cost").innerHTML = String(
+      adventure.costPerHead
+    );
+  } else {
+    document.getElementById("reservation-panel-available").style.display =
+      "none";
+    document.getElementById("reservation-panel-sold-out").style.display =
+      "block";
+  }
+
+
 
 }
 
@@ -151,6 +169,9 @@ function conditionalRenderingOfReservationPanel(adventure) {
 function calculateReservationCostAndUpdateDOM(adventure, persons) {
   // TODO: MODULE_RESERVATIONS
   // 1. Calculate the cost based on number of persons and update the reservation-cost field
+  document.getElementById("reservation-cost").innerHTML =
+    adventure.costPerHead * parseInt(persons);
+
 
 }
 
@@ -159,12 +180,46 @@ function captureFormSubmitUsingJQuery(adventure) {
   // TODO: MODULE_RESERVATIONS
   // 1. Capture the query details and make a POST API call using JQuery to make the reservation
   // 2. If the reservation is successful, show an alert with "Success!" and refresh the page. If the reservation fails, just show an alert with "Failed!".
+
+  console.log(adventure);
+  $("#myForm").on("submit", function (e) {
+    //prevent Default functionality
+    e.preventDefault();
+
+
+    var urlf = `${config.backendEndpoint}/reservations/new`;
+
+    //do your own request an handle the results
+    $.ajax({
+      url: urlf,
+      type: "post",
+      dataType: "application/json",
+      data: `${$(this).serialize()}&adventure=${adventure.id}`,
+      success: function (data, status, xhr) {
+        window.alert("Success!");
+        window.location.reload();
+      },
+      error: function (jqXhr, textStatus, errorMessage) {
+        window.alert("Failed!");
+      }
+    });
+
+
+
+  });
+
 }
 
 //Implementation of success banner after reservation
 function showBannerIfAlreadyReserved(adventure) {
   // TODO: MODULE_RESERVATIONS
   // 1. If user has already reserved this adventure, show the reserved-banner, else don't
+  console.log(adventure);
+  if (adventure.reserved) {
+    document.getElementById("reserved-banner").style.display = "block";
+  } else {
+    document.getElementById("reserved-banner").style.display = "none";
+  }
 
 }
 
