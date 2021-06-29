@@ -15,7 +15,6 @@ function getCityFromURL(search) {
 async function fetchAdventures(city) {
   // TODO: MODULE_ADVENTURES
   // 1. Fetch adventures using the Backend API and return the data
-
   let url = config.backendEndpoint + "/adventures?city=" + city;
   try {
     let response = await fetch(url);
@@ -26,8 +25,6 @@ async function fetchAdventures(city) {
   }
 
 }
-
-//Implementation of DOM manipulation to add adventures for the given city from list of adventures
 function addAdventureToDOM(adventures) {
   // TODO: MODULE_ADVENTURES
   // 1. Populate the Adventure Cards and insert those details into the DOM
@@ -111,6 +108,8 @@ function filterByCategory(list, categoryList) {
     for(let catelm of categoryList){
       if(catelm==elem.category){
         return true;
+      }else{
+        return false;
       }
     }
   });
@@ -130,6 +129,7 @@ function filterFunction(list, filters) {
   // TODO: MODULE_FILTERS
   // 1. Handle the 3 cases detailed in the comments above and return the filtered list of adventures
   // 2. Depending on which filters are needed, invoke the filterByDuration() and/or filterByCategory() methods
+  console.log(list);
   if((filters.duration).length==0 && (filters.category).length!==0){
     return filterByCategory(list, filters.category);
   }else if((filters.duration).length!==0 && (filters.category).length==0){
